@@ -1,5 +1,5 @@
 # ProfanityFilter
-Profanity filter written in Swift 3 using NSRegularExpressions
+Profanity filter written in Swift using NSRegularExpressions
 
 Example usage:
 
