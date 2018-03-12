@@ -3,4 +3,7 @@ Profanity filter written in Swift 3 using NSRegularExpressions
 
 Example usage:
 
-    titleLabel.text = ProfanityFilter.sharedInstance.cleanUp(yourString)
+    let testWord = "naughty"
+
+    // returns "😲😲😲😲😲😲😲"
+    let cleanedUpWord = ProfanityFilter.cleanUp(testWord)
