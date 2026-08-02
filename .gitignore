@@ -2,6 +2,7 @@
 MODERNIZATION.md
 
 # Plaintext word lists (hashed artifacts are committed)
+Maintainer/*.txt
 **/WordLists/*.txt
 **/*.plaintext
 
