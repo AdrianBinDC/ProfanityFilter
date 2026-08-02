@@ -80,7 +80,16 @@ A custom `wordList` ignores language detection — that filter always uses your 
 
 ## Language mode
 
-Bundled lists: English, Spanish, French, Irish, Arabic, and Chinese (`Language` cases).
+### Supported languages
+
+| Language | `Language` case | Resource |
+|----------|-----------------|----------|
+| English | `.english` | `en.hashes` |
+| Spanish | `.spanish` | `es.hashes` |
+| French | `.french` | `fr.hashes` |
+| Irish | `.irish` | `ga.hashes` |
+| Arabic | `.arabic` | `ar.hashes` |
+| Chinese | `.chinese` | `zh.hashes` |
 
 ```swift
 // Always English (default)
@@ -95,6 +104,7 @@ ProfanityFilter(languageMode: .automatic(fallback: .english))
 // Union of every bundled list (costlier; useful for mixed text)
 ProfanityFilter(languageMode: .allBundled)
 ```
+
 
 **Caveats**
 

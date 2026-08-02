@@ -80,7 +80,16 @@ Una `wordList` personalizada ignora la detección de idioma: ese filtro siempre 
 
 ## Modo de idioma
 
-Listas incluidas: inglés, español, francés, irlandés, árabe y chino (casos de `Language`).
+### Idiomas soportados
+
+| Idioma | Caso `Language` | Recurso |
+|--------|-----------------|---------|
+| Inglés | `.english` | `en.hashes` |
+| Español | `.spanish` | `es.hashes` |
+| Francés | `.french` | `fr.hashes` |
+| Irlandés | `.irish` | `ga.hashes` |
+| Árabe | `.arabic` | `ar.hashes` |
+| Chino | `.chinese` | `zh.hashes` |
 
 ```swift
 // Siempre inglés (predeterminado)
@@ -95,6 +104,7 @@ ProfanityFilter(languageMode: .automatic(fallback: .english))
 // Unión de todas las listas incluidas (más costoso; útil con texto mezclado)
 ProfanityFilter(languageMode: .allBundled)
 ```
+
 
 **Aviso**
 
