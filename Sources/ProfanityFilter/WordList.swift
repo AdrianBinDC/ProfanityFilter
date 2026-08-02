@@ -55,10 +55,10 @@ public struct WordList: Sendable, Hashable {
       Bundle.module.url(
         forResource: language.rawValue,
         withExtension: "hashes",
-        subdirectory: "WordLists"
+        subdirectory: "WordLists",
       ) ?? Bundle.module.url(
         forResource: language.rawValue,
-        withExtension: "hashes"
+        withExtension: "hashes",
       )
     guard let url else { return nil }
     return loadDigests(from: url)

@@ -1,38 +1,39 @@
 // Copyright (c) 2018-2026 Adrian Bolinger
 // SPDX-License-Identifier: MIT
 
-import Foundation
+import Synchronization
 
 /// Process-wide cache of bundled ``MatchIndex`` values (built once per language).
 enum BundledMatchIndices {
-  private static let lock = NSLock()
-  private static var indicesByLanguage: [Language: MatchIndex] = [:]
-  private static var allBundledIndex: MatchIndex?
+  private struct State: Sendable {
+    var indicesByLanguage: [Language: MatchIndex] = [:]
+    var allBundledIndex: MatchIndex?
+  }
+
+  private static let state = Mutex(State())
 
   static func index(for language: Language) -> MatchIndex {
-    lock.lock()
-    defer { lock.unlock() }
+    state.withLock { state in
+      if let cached = state.indicesByLanguage[language] {
+        return cached
+      }
 
-    if let cached = indicesByLanguage[language] {
-      return cached
+      let index = MatchIndex(wordList: .bundled(for: language))
+      state.indicesByLanguage[language] = index
+      return index
     }
-
-    let index = MatchIndex(wordList: .bundled(for: language))
-    indicesByLanguage[language] = index
-    return index
   }
 
   static func allBundled() -> MatchIndex {
-    lock.lock()
-    defer { lock.unlock() }
+    state.withLock { state in
+      if let cached = state.allBundledIndex {
+        return cached
+      }
 
-    if let cached = allBundledIndex {
-      return cached
+      let index = MatchIndex(wordList: .allBundled())
+      state.allBundledIndex = index
+      return index
     }
-
-    let index = MatchIndex(wordList: .allBundled())
-    allBundledIndex = index
-    return index
   }
 
   static func index(for mode: LanguageMode, text: String) -> MatchIndex {

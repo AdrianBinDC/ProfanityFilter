@@ -19,7 +19,7 @@ public struct ProfanityFilter: Sendable {
   /// Creates a filter that selects bundled lists according to `languageMode`.
   public init(
     replacement: Replacement = .default,
-    languageMode: LanguageMode = .fixed(.english)
+    languageMode: LanguageMode = .fixed(.english),
   ) {
     self.replacement = replacement
     self.languageMode = languageMode
@@ -30,7 +30,7 @@ public struct ProfanityFilter: Sendable {
   /// Creates a filter that always uses a caller-provided word list (no language detection).
   public init(
     replacement: Replacement = .default,
-    wordList: WordList
+    wordList: WordList,
   ) {
     self.replacement = replacement
     languageMode = nil
