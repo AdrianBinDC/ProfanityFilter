@@ -7,17 +7,19 @@ import Testing
 
 @Suite("ProfanityFilter engine")
 struct ProfanityFilterTests {
-  private let toyList = WordList(words: ["red", "blue", "hot pink"])
+  private static var toyList: WordList {
+    WordList(words: ["red", "blue", "hot pink"])
+  }
 
   @Test("clean text is unchanged")
   func cleanTextUnchanged() {
-    let filter = ProfanityFilter(wordList: toyList)
+    let filter = ProfanityFilter(wordList: Self.toyList)
     #expect(filter.censor("hello world") == "hello world")
   }
 
   @Test("empty string is unchanged")
   func emptyStringUnchanged() {
-    let filter = ProfanityFilter(wordList: toyList)
+    let filter = ProfanityFilter(wordList: Self.toyList)
     #expect(filter.censor("") == "")
   }
 
@@ -25,7 +27,7 @@ struct ProfanityFilterTests {
   func listedWordCensored() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
-      wordList: toyList
+      wordList: Self.toyList
     )
     #expect(filter.censor("red") == "***")
   }
@@ -34,7 +36,7 @@ struct ProfanityFilterTests {
   func caseInsensitive() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
-      wordList: toyList
+      wordList: Self.toyList
     )
     #expect(filter.censor("RED") == "***")
     #expect(filter.censor("Red") == "***")
@@ -54,7 +56,7 @@ struct ProfanityFilterTests {
   func multiMatch() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
-      wordList: toyList
+      wordList: Self.toyList
     )
     #expect(filter.censor("red and blue") == "*** and ****")
   }
@@ -63,19 +65,19 @@ struct ProfanityFilterTests {
   func phraseMatching() {
     let filter = ProfanityFilter(
       replacement: .fixed("[x]"),
-      wordList: toyList
+      wordList: Self.toyList
     )
     #expect(filter.censor("a hot pink car") == "a [x] car")
   }
 
   @Test("fixed and custom replacements")
   func replacementStyles() {
-    let fixed = ProfanityFilter(replacement: .fixed("[censored]"), wordList: toyList)
+    let fixed = ProfanityFilter(replacement: .fixed("[censored]"), wordList: Self.toyList)
     #expect(fixed.censor("red") == "[censored]")
 
     let custom = ProfanityFilter(
       replacement: .custom { String(repeating: "•", count: $0.count) },
-      wordList: toyList
+      wordList: Self.toyList
     )
     #expect(custom.censor("blue") == "••••")
   }
@@ -92,7 +94,7 @@ struct ProfanityFilterTests {
 
   @Test("String.censored conveniences")
   func stringConveniences() {
-    let filter = ProfanityFilter(replacement: .repeating("*"), wordList: toyList)
+    let filter = ProfanityFilter(replacement: .repeating("*"), wordList: Self.toyList)
     #expect("red".censored(using: filter) == "***")
     #expect("hello".censored(using: filter) == "hello")
   }
