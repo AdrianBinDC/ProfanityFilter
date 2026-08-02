@@ -8,7 +8,7 @@ Maintainer/*.txt
 
 # SPM / Xcode
 .build/
-# Keep shared schemes under .swiftpm/xcode/xcshareddata; ignore local SPM extras.
+# Keep shared schemes + test plan under .swiftpm; ignore local SPM extras.
 .swiftpm/config
 .swiftpm/xcode/package.xcworkspace/xcuserdata/
 DerivedData/
