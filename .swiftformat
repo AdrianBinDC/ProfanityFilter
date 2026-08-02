@@ -2,4 +2,5 @@
 --swiftversion 5.9
 --indent 2
 --disable wrapMultilineStatementBraces
+--disable redundantSendable
 --exclude .build,.swiftpm,Scripts

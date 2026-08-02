@@ -5,12 +5,12 @@ import Foundation
 
 /// A set of words/phrases used to build a ``MatchIndex``.
 public struct WordList: Sendable, Hashable {
-  enum Storage: Sendable, Hashable {
+  enum Storage: Hashable {
     case words(Set<String>)
     case digests([DigestEntry])
   }
 
-  struct DigestEntry: Sendable, Hashable {
+  struct DigestEntry: Hashable {
     let digest: Data
     let tokenCount: Int
   }

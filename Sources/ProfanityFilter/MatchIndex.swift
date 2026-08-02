@@ -5,7 +5,7 @@ import Foundation
 
 /// Init-once matcher: single-token digests in a `Set`, multi-token phrases checked by windows.
 struct MatchIndex: Sendable {
-  struct Phrase: Sendable {
+  struct Phrase {
     let digest: Data
     let tokenCount: Int
   }
