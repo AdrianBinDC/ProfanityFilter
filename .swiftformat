@@ -1,5 +1,5 @@
 # SwiftFormat config — keep aligned with Make / CI (`make format` / `make format-check`).
---swiftversion 5.9
+--swiftversion 6.3
 --indent 2
 --disable wrapMultilineStatementBraces
 --disable redundantSendable

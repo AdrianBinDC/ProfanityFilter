@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "8CA89881-FC70-4605-A621-9399A839097C",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:",
+      "identifier" : "ProfanityFilter",
+      "name" : "ProfanityFilter"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfanityFilterTests",
+        "name" : "ProfanityFilterTests"
+      }
+    }
+  ],
+  "version" : 1
+}

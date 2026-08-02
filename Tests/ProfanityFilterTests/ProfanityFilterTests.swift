@@ -11,79 +11,79 @@ struct ProfanityFilterTests {
     WordList(words: ["red", "blue", "hot pink"])
   }
 
-  @Test("clean text is unchanged")
-  func cleanTextUnchanged() {
+  @Test
+  func `clean text is unchanged`() {
     let filter = ProfanityFilter(wordList: Self.toyList)
     #expect(filter.censor("hello world") == "hello world")
   }
 
-  @Test("empty string is unchanged")
-  func emptyStringUnchanged() {
+  @Test
+  func `empty string is unchanged`() {
     let filter = ProfanityFilter(wordList: Self.toyList)
     #expect(filter.censor("") == "")
   }
 
-  @Test("listed word is censored with repeating replacement")
-  func listedWordCensored() {
+  @Test
+  func `listed word is censored with repeating replacement`() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
-      wordList: Self.toyList
+      wordList: Self.toyList,
     )
     #expect(filter.censor("red") == "***")
   }
 
-  @Test("matching is case insensitive")
-  func caseInsensitive() {
+  @Test
+  func `matching is case insensitive`() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
-      wordList: Self.toyList
+      wordList: Self.toyList,
     )
     #expect(filter.censor("RED") == "***")
     #expect(filter.censor("Red") == "***")
   }
 
-  @Test("word boundaries avoid embedded false positives")
-  func wordBoundaries() {
+  @Test
+  func `word boundaries avoid embedded false positives`() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
-      wordList: WordList(words: ["ass"])
+      wordList: WordList(words: ["ass"]),
     )
     #expect(filter.censor("classic") == "classic")
     #expect(filter.censor("ass") == "***")
   }
 
-  @Test("multi-match in one string")
-  func multiMatch() {
+  @Test
+  func `multi-match in one string`() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
-      wordList: Self.toyList
+      wordList: Self.toyList,
     )
     #expect(filter.censor("red and blue") == "*** and ****")
   }
 
-  @Test("phrase matching")
-  func phraseMatching() {
+  @Test
+  func `phrase matching`() {
     let filter = ProfanityFilter(
       replacement: .fixed("[x]"),
-      wordList: Self.toyList
+      wordList: Self.toyList,
     )
     #expect(filter.censor("a hot pink car") == "a [x] car")
   }
 
-  @Test("fixed and custom replacements")
-  func replacementStyles() {
+  @Test
+  func `fixed and custom replacements`() {
     let fixed = ProfanityFilter(replacement: .fixed("[censored]"), wordList: Self.toyList)
     #expect(fixed.censor("red") == "[censored]")
 
     let custom = ProfanityFilter(
       replacement: .custom { String(repeating: "•", count: $0.count) },
-      wordList: Self.toyList
+      wordList: Self.toyList,
     )
     #expect(custom.censor("blue") == "••••")
   }
 
-  @Test("inserting and removing words")
-  func insertingAndRemoving() {
+  @Test
+  func `inserting and removing words`() {
     let base = WordList(words: ["red"])
     let expanded = base.inserting(["green"])
     let reduced = expanded.removing(["red"])
@@ -92,25 +92,25 @@ struct ProfanityFilterTests {
     #expect(ProfanityFilter(replacement: .repeating("*"), wordList: reduced).censor("red") == "red")
   }
 
-  @Test("String.censored conveniences")
-  func stringConveniences() {
+  @Test
+  func `string censored conveniences`() {
     let filter = ProfanityFilter(replacement: .repeating("*"), wordList: Self.toyList)
     #expect("red".censored(using: filter) == "***")
     #expect("hello".censored(using: filter) == "hello")
   }
 
-  @Test("bundled English list loads and censors a known word")
-  func bundledEnglishList() {
+  @Test
+  func `bundled English list loads and censors a known word`() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
-      wordList: .bundled(for: .english)
+      wordList: .bundled(for: .english),
     )
     #expect(filter.censor("fuck") == "****")
     #expect(filter.censor("hello") == "hello")
   }
 
-  @Test("bundled list digest file is non-empty")
-  func bundledDigestFileNonEmpty() {
+  @Test
+  func `bundled list digest file is non-empty`() {
     let list = WordList.bundled(for: .english)
     guard case let .digests(entries) = list.storage else {
       Issue.record("Expected bundled digests storage")
@@ -119,16 +119,16 @@ struct ProfanityFilterTests {
     #expect(entries.count >= 300)
   }
 
-  @Test("deprecated cleanUp matches censor")
-  func deprecatedCleanUpMatchesCensor() {
+  @Test
+  func `deprecated cleanUp matches censor`() {
     let input = "fuck"
     let modern = ProfanityFilter.default.censor(input)
     #expect(ProfanityFilter.cleanUp(input) == modern)
     #expect(input.cleanUp() == modern)
   }
 
-  @Test("default emoji replacement length matches match")
-  func defaultEmojiReplacement() {
+  @Test
+  func `default emoji replacement length matches match`() {
     let result = ProfanityFilter.default.censor("fuck")
     #expect(result == String(repeating: "😲", count: 4))
   }
