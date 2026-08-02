@@ -15,7 +15,7 @@ enum WordDigest {
   static func digest(forNormalizedWord word: String) -> Data {
     let mac = HMAC<SHA256>.authenticationCode(
       for: Data(word.utf8),
-      using: SymmetricKey(data: salt)
+      using: SymmetricKey(data: salt),
     )
     return Data(mac)
   }

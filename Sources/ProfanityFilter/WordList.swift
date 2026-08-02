@@ -25,19 +25,42 @@ public struct WordList: Sendable, Hashable {
 
   /// Loads the bundled hashed list for `language`.
   public static func bundled(for language: Language) -> WordList {
+    guard let list = bundledIfPresent(for: language) else {
+      preconditionFailure("Missing bundled word list for \(language.rawValue)")
+    }
+    return list
+  }
+
+  /// Union of every bundled language list that is present in the package resources.
+  public static func allBundled() -> WordList {
+    var combined: [DigestEntry] = []
+    var seen = Set<Data>()
+
+    for language in Language.allCases {
+      guard case let .digests(entries) = bundledIfPresent(for: language)?.storage else {
+        continue
+      }
+      for entry in entries where seen.insert(entry.digest).inserted {
+        combined.append(entry)
+      }
+    }
+
+    return WordList(storage: .digests(combined))
+  }
+
+  /// Loads a bundled list when the resource exists; otherwise `nil`.
+  public static func bundledIfPresent(for language: Language) -> WordList? {
     // SPM `.process` may place files at the bundle root or under WordLists/.
     let url =
       Bundle.module.url(
         forResource: language.rawValue,
         withExtension: "hashes",
-        subdirectory: "WordLists"
+        subdirectory: "WordLists",
       ) ?? Bundle.module.url(
         forResource: language.rawValue,
-        withExtension: "hashes"
+        withExtension: "hashes",
       )
-    guard let url else {
-      preconditionFailure("Missing bundled word list for \(language.rawValue)")
-    }
+    guard let url else { return nil }
     return loadDigests(from: url)
   }
 

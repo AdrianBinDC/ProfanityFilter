@@ -13,10 +13,16 @@ concurrency:
 jobs:
   lint:
     name: lint
-    runs-on: macos-14
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Select Xcode 26.6
+        run: sudo xcode-select -s /Applications/Xcode_26.6.app
+
+      - name: Show Swift version
+        run: swift --version
 
       - name: Install SwiftLint
         run: brew install swiftlint
@@ -26,10 +32,13 @@ jobs:
 
   format:
     name: format
-    runs-on: macos-14
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Select Xcode 26.6
+        run: sudo xcode-select -s /Applications/Xcode_26.6.app
 
       - name: Install SwiftFormat
         run: brew install swiftformat
@@ -39,10 +48,16 @@ jobs:
 
   test:
     name: test
-    runs-on: macos-14
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Select Xcode 26.6
+        run: sudo xcode-select -s /Applications/Xcode_26.6.app
+
+      - name: Show Swift version
+        run: swift --version
 
       - name: Run tests
         run: make test

@@ -1,19 +1,20 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.3
 import PackageDescription
 
 let package = Package(
   name: "ProfanityFilter",
   platforms: [
-    .iOS(.v13),
-    .macOS(.v10_15),
-    .tvOS(.v13),
-    .watchOS(.v6),
-    .visionOS(.v1),
+    // Synchronization.Mutex requires Swift 6 stdlib / modern OS floors.
+    .iOS(.v18),
+    .macOS(.v15),
+    .tvOS(.v18),
+    .watchOS(.v11),
+    .visionOS(.v2),
   ],
   products: [
     .library(
       name: "ProfanityFilter",
-      targets: ["ProfanityFilter"]
+      targets: ["ProfanityFilter"],
     ),
   ],
   targets: [
@@ -21,11 +22,17 @@ let package = Package(
       name: "ProfanityFilter",
       resources: [
         .process("Resources"),
-      ]
+      ],
+      swiftSettings: [
+        .swiftLanguageMode(.v6),
+      ],
     ),
     .testTarget(
       name: "ProfanityFilterTests",
-      dependencies: ["ProfanityFilter"]
+      dependencies: ["ProfanityFilter"],
+      swiftSettings: [
+        .swiftLanguageMode(.v6),
+      ],
     ),
-  ]
+  ],
 )
