@@ -1,0 +1,23 @@
+# Starter config — tighten once the word list leaves the source file.
+disabled_rules:
+  - line_length
+  - file_length
+  - type_body_length
+  - function_body_length
+  - todo
+
+opt_in_rules:
+  - empty_count
+  - sorted_imports
+
+included:
+  - .
+  - Sources
+  - Tests
+
+excluded:
+  - .build
+  - .swiftpm
+  - Scripts
+
+reporter: xcode
