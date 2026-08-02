@@ -1,0 +1,5 @@
+# SwiftFormat config — keep aligned with Make / CI (`make format` / `make format-check`).
+--swiftversion 5.9
+--indent 2
+--disable wrapMultilineStatementBraces
+--exclude .build,.swiftpm,Scripts
