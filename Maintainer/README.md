@@ -1,36 +1,39 @@
 # Maintainer word lists
 
-Plaintext corpora live here locally and are **gitignored**. The package ships only salted digests under `Sources/ProfanityFilter/Resources/WordLists/`.
+Canonical corpora come from [coffee-and-fun/google-profanity-words](https://github.com/coffee-and-fun/google-profanity-words) (MIT). This package commits **only** salted digests under `Sources/ProfanityFilter/Resources/WordLists/`.
 
-## Update the English list
+## Update from upstream (the button)
 
-1. Edit `Maintainer/en.txt` (one word or phrase per line; `#` comments allowed).
+1. Optionally bump `UPSTREAM_REF` in the root `Makefile` (or let the daily sync workflow open a PR).
 2. Regenerate digests:
 
    ```bash
-   make hash-wordlist
+   make sync-wordlists
    ```
 
-3. Commit **only** `Sources/ProfanityFilter/Resources/WordLists/en.hashes` (never the `.txt`).
+3. Commit the changed `*.hashes` (and `Makefile` if the pin moved). Never commit plaintext `.txt` lists.
+
+Daily CI (`.github/workflows/sync-wordlists.yml`) checks for upstream changes and opens a PR when digests would change.
 
 ## Probe membership
-
-Check whether a word hashes into the committed set without printing the corpus:
 
 ```bash
 make check-word WORD=example
 ```
 
-## Show local plaintext
+Uses `en.hashes` by default (`WORDLIST_HASHES=…` to override).
+
+## Local plaintext (optional / legacy)
+
+`Maintainer/*.txt` remains gitignored for ad-hoc experiments:
 
 ```bash
-make reveal-wordlist
+make hash-wordlist          # Maintainer/en.txt → en.hashes
+make reveal-wordlist        # print local plaintext if present
 ```
 
-Fails if `Maintainer/en.txt` is missing (expected on a fresh clone).
+Prefer `make sync-wordlists` for anything you ship.
 
-## Add another language later
+## Attribution
 
-1. Add `Maintainer/<code>.txt` and wire `make hash-wordlist` (or a dedicated target) to emit `Sources/ProfanityFilter/Resources/WordLists/<code>.hashes`.
-2. Add a `Language` case whose `rawValue` matches the file stem (e.g. `es` → `es.hashes`).
-3. Extend `Language` ↔ `NLLanguage` mapping in `LanguageDetector` when automatic detection should pick it up.
+See [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md). Corpus fixes belong upstream via PR to coffee-and-fun/google-profanity-words.
