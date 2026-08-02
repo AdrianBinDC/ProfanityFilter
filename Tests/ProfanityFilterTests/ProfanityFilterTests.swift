@@ -116,7 +116,29 @@ struct ProfanityFilterTests {
       Issue.record("Expected bundled digests storage")
       return
     }
-    #expect(entries.count >= 300)
+    #expect(entries.count >= 900)
+  }
+
+  @Test
+  func `every bundled language list loads`() {
+    for language in Language.allCases {
+      let list = WordList.bundled(for: language)
+      guard case let .digests(entries) = list.storage else {
+        Issue.record("Expected digests for \(language.rawValue)")
+        continue
+      }
+      #expect(!entries.isEmpty)
+    }
+  }
+
+  @Test
+  func `bundled Spanish list censors a known word`() {
+    let filter = ProfanityFilter(
+      replacement: .repeating("*"),
+      wordList: .bundled(for: .spanish),
+    )
+    #expect(filter.censor("mierda") == "******")
+    #expect(filter.censor("hola") == "hola")
   }
 
   @Test

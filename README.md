@@ -80,11 +80,23 @@ A custom `wordList` ignores language detection — that filter always uses your 
 
 ## Language mode
 
-v1 ships an English bundled list. Detection is ready for more languages later.
+### Supported languages
+
+| Language | `Language` case | Resource |
+|----------|-----------------|----------|
+| English | `.english` | `en.hashes` |
+| Spanish | `.spanish` | `es.hashes` |
+| French | `.french` | `fr.hashes` |
+| Irish | `.irish` | `ga.hashes` |
+| Arabic | `.arabic` | `ar.hashes` |
+| Chinese | `.chinese` | `zh.hashes` |
 
 ```swift
 // Always English (default)
 ProfanityFilter(languageMode: .fixed(.english))
+
+// Spanish list
+ProfanityFilter(languageMode: .fixed(.spanish))
 
 // Detect with NaturalLanguage; fall back when short / low confidence
 ProfanityFilter(languageMode: .automatic(fallback: .english))
@@ -93,31 +105,36 @@ ProfanityFilter(languageMode: .automatic(fallback: .english))
 ProfanityFilter(languageMode: .allBundled)
 ```
 
+
 **Caveats**
 
 - Very short strings are unreliable for detection (“fuck” alone may not look like English). `.automatic` uses the fallback below a minimum length / confidence.
 - Mixed-language text is hard; prefer `.fixed` or `.allBundled` when you know the mix.
-- Non-English lists are not shipped yet — adding one later is a hashed resource plus a `Language` case.
 
 ## Word lists in the repo
 
-Bundled lists are **HMAC-SHA256 digests**, not plaintext. That keeps foul language out of git history; it is hygiene, not secrecy (a public salt means common dictionaries can still be probed).
+Bundled lists are **HMAC-SHA256 digests**, not plaintext. Corpora are synced from [coffee-and-fun/google-profanity-words](https://github.com/coffee-and-fun/google-profanity-words) (MIT) — see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Digests are hygiene, not secrecy (a public salt means common dictionaries can still be probed).
 
-Maintainers keep local plaintext under `Maintainer/` (gitignored). See [Maintainer/README.md](Maintainer/README.md).
+```bash
+make sync-wordlists   # bump UPSTREAM_REF in the Makefile first if needed
+```
+
+Daily CI opens a PR when upstream releases would change the digests. Details: [Maintainer/README.md](Maintainer/README.md).
 
 ## Development
 
 ```bash
-make lint          # SwiftLint
-make format        # SwiftFormat (write)
-make format-check  # SwiftFormat --lint (CI)
-make test          # swift test
+make lint              # SwiftLint
+make format            # SwiftFormat (write)
+make format-check      # SwiftFormat --lint (CI)
+make test              # swift test
+make sync-wordlists    # refresh *.hashes from upstream
 ```
 
-CI runs the same Make targets on GitHub Actions (`lint` / `format` / `test`).
+CI runs lint / format / test on GitHub Actions, plus a scheduled word-list sync workflow.
 
 Open `Package.swift` in Xcode, select the **ProfanityFilter** scheme (and its shared test plan), destination **My Mac**, then ⌘U.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). Third-party corpus attribution: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
