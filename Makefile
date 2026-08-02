@@ -11,7 +11,7 @@ help:
 	@echo "  make lint            Run SwiftLint"
 	@echo "  make format          Apply SwiftFormat"
 	@echo "  make format-check    SwiftFormat --lint (CI)"
-	@echo "  make test            Run swift test (no-op until Package.swift exists)"
+	@echo "  make test            Run swift test"
 	@echo "  make hash-wordlist   Hash plaintext word list (engine PR)"
 	@echo "  make check-word WORD=…  Probe membership (engine PR)"
 	@echo "  make reveal-wordlist Show local plaintext word list if present"
@@ -26,11 +26,7 @@ format-check:
 	swiftformat --lint .
 
 test:
-	@if [ -f Package.swift ]; then \
-		swift test; \
-	else \
-		echo "No Package.swift yet; skipping tests (add the SPM package next)."; \
-	fi
+	swift test
 
 hash-wordlist:
 	@echo "hash-wordlist will be implemented with the censor engine PR." >&2
