@@ -1,0 +1,21 @@
+# Local planning (not for GitHub)
+MODERNIZATION.md
+
+# Plaintext word lists (hashed artifacts are committed)
+**/WordLists/*.txt
+**/*.plaintext
+
+# SPM / Xcode
+.build/
+.swiftpm/
+DerivedData/
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+*.xcuserstate
+
+# OS / editor
+.DS_Store
+.idea/
+*.swp
+*~
