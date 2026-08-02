@@ -3,9 +3,8 @@
 
 /// Selects which bundled word list(s) to apply when censoring.
 ///
-/// Only languages with a committed `*.hashes` resource are available. v1 ships
-/// English; additional languages can be added without changing this enum’s cases
-/// beyond a new ``Language`` value.
+/// Bundled digests exist for every ``Language`` case (synced from upstream via
+/// `make sync-wordlists`).
 ///
 /// ### Automatic detection
 ///

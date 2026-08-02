@@ -80,11 +80,14 @@ Una `wordList` personalizada ignora la detección de idioma: ese filtro siempre 
 
 ## Modo de idioma
 
-La v1 incluye una lista en inglés. La detección queda lista para más idiomas después.
+Listas incluidas: inglés, español, francés, irlandés, árabe y chino (casos de `Language`).
 
 ```swift
 // Siempre inglés (predeterminado)
 ProfanityFilter(languageMode: .fixed(.english))
+
+// Lista en español
+ProfanityFilter(languageMode: .fixed(.spanish))
 
 // Detectar con NaturalLanguage; usar fallback si el texto es corto o la confianza es baja
 ProfanityFilter(languageMode: .automatic(fallback: .english))
@@ -97,27 +100,31 @@ ProfanityFilter(languageMode: .allBundled)
 
 - Cadenas muy cortas son poco fiables para detectar idioma. `.automatic` usa el fallback bajo un mínimo de longitud / confianza.
 - Texto mezclado es difícil; usa `.fixed` o `.allBundled` cuando conozcas el caso.
-- Aún no se incluyen listas que no sean inglés — añadir una después es un recurso hasheado más un caso de `Language`.
 
 ## Listas de palabras en el repositorio
 
-Las listas incluidas son **digests HMAC-SHA256**, no texto plano. Evita guardar lenguaje ofensivo en git; es higiene, no secreto (con sal pública se pueden sondear diccionarios conocidos).
+Las listas incluidas son **digests HMAC-SHA256**, no texto plano. Los corpus se sincronizan desde [coffee-and-fun/google-profanity-words](https://github.com/coffee-and-fun/google-profanity-words) (MIT) — ver [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-Quien mantiene el paquete guarda el texto plano local en `Maintainer/` (ignorado por git). Ver [Maintainer/README.md](Maintainer/README.md).
+```bash
+make sync-wordlists   # ajusta UPSTREAM_REF en el Makefile si hace falta
+```
+
+CI diario abre un PR cuando un release upstream cambiaría los digests. Detalles: [Maintainer/README.md](Maintainer/README.md).
 
 ## Desarrollo
 
 ```bash
-make lint          # SwiftLint
-make format        # SwiftFormat (escribe)
-make format-check  # SwiftFormat --lint (CI)
-make test          # swift test
+make lint              # SwiftLint
+make format            # SwiftFormat (escribe)
+make format-check      # SwiftFormat --lint (CI)
+make test              # swift test
+make sync-wordlists    # refresca *.hashes desde upstream
 ```
 
-CI ejecuta los mismos targets de Make en GitHub Actions (`lint` / `format` / `test`).
+CI ejecuta lint / format / test en GitHub Actions, más un workflow programado de sync.
 
 Abre `Package.swift` en Xcode, elige el scheme **ProfanityFilter** (y su test plan compartido), destino **My Mac**, luego ⌘U.
 
 ## Licencia
 
-MIT. Ver [LICENSE](LICENSE).
+MIT. Ver [LICENSE](LICENSE). Atribución del corpus: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

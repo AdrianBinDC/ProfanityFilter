@@ -1,0 +1,61 @@
+name: Sync word lists
+
+on:
+  schedule:
+    # Daily 15:00 UTC
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-wordlists
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: sync-wordlists
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 26.6
+        run: sudo xcode-select -s /Applications/Xcode_26.6.app
+
+      - name: Resolve latest upstream release tag
+        id: upstream
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=$(gh api repos/coffee-and-fun/google-profanity-words/releases/latest --jq .tag_name)
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Latest upstream release: $TAG"
+
+      - name: Sync digests from upstream
+        run: make sync-wordlists UPSTREAM_REF="${{ steps.upstream.outputs.tag }}"
+
+      - name: Bump Makefile pin
+        run: |
+          sed -i '' "s/^UPSTREAM_REF ?= .*/UPSTREAM_REF ?= ${{ steps.upstream.outputs.tag }}/" Makefile
+
+      - name: Open PR if digests or pin changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Sync word lists from google-profanity-words ${{ steps.upstream.outputs.tag }}"
+          branch: chore/sync-wordlists
+          delete-branch: true
+          title: "chore: sync word lists (${{ steps.upstream.outputs.tag }})"
+          body: |
+            ## Summary
+            - Regenerated salted digests from [coffee-and-fun/google-profanity-words](https://github.com/coffee-and-fun/google-profanity-words) `${{ steps.upstream.outputs.tag }}`
+            - Updated `UPSTREAM_REF` in the Makefile
+
+            ## Test plan
+            - [ ] CI green on this PR
+            - [ ] Spot-check `make check-word WORD=…` for a known entry if the diff is large
+
+            Automated by `.github/workflows/sync-wordlists.yml`.

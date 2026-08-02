@@ -17,12 +17,13 @@ struct LanguageModeTests {
   }
 
   @Test
-  func `allBundled includes the English list while only English is shipped`() {
+  func `allBundled includes English and Spanish lists`() {
     let filter = ProfanityFilter(
       replacement: .repeating("*"),
       languageMode: .allBundled,
     )
     #expect(filter.censor("fuck") == "****")
+    #expect(filter.censor("mierda") == "******")
   }
 
   @Test
