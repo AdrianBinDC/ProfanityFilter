@@ -2,6 +2,16 @@
 // SPDX-License-Identifier: MIT
 
 /// Selects which bundled word list(s) to apply when censoring.
+///
+/// Only languages with a committed `*.hashes` resource are available. v1 ships
+/// English; additional languages can be added without changing this enum’s cases
+/// beyond a new ``Language`` value.
+///
+/// ### Automatic detection
+///
+/// ``automatic(fallback:)`` uses `NLLanguageRecognizer`. Short strings and
+/// low-confidence hypotheses fall back to `fallback` — detection alone is not
+/// reliable for a single expletive.
 public enum LanguageMode: Sendable, Equatable {
   /// Detect the text language, then use that list when available.
   ///

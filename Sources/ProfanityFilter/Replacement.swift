@@ -3,7 +3,9 @@
 
 /// How matched profanity is rewritten in the output string.
 public enum Replacement: Sendable {
-  /// Repeat `unit` until the replacement length matches the match (default: `😲`).
+  /// Repeat `unit` until the replacement length matches the match (default unit: `😲`).
+  ///
+  /// For a single-character `unit`, the result length equals the match’s character count.
   case repeating(String)
 
   /// Always substitute this fixed string, regardless of match length.
