@@ -3,8 +3,12 @@
 
 import NaturalLanguage
 
-/// Bundled word-list languages. Add a `*.hashes` resource to extend.
+/// Bundled word-list languages.
+///
+/// The `rawValue` is the resource stem for `Resources/WordLists/<rawValue>.hashes`.
+/// Add a case and a matching digest file to ship another language.
 public enum Language: String, Sendable, CaseIterable, Hashable {
+  /// English (`en.hashes`).
   case english = "en"
 
   init?(nlLanguage: NLLanguage) {

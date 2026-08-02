@@ -3,6 +3,9 @@
 
 public extension String {
   /// Returns a censored copy using ``ProfanityFilter/default``.
+  ///
+  /// Prefer configuring a ``ProfanityFilter`` when you need a custom
+  /// ``Replacement`` or ``LanguageMode``.
   func censored() -> String {
     censored(using: .default)
   }
