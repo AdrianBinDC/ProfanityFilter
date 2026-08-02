@@ -18,7 +18,10 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "ProfanityFilter"
+      name: "ProfanityFilter",
+      resources: [
+        .process("Resources"),
+      ]
     ),
     .testTarget(
       name: "ProfanityFilterTests",
