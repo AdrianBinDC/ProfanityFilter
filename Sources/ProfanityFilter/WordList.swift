@@ -3,7 +3,12 @@
 
 import Foundation
 
-/// A set of words/phrases used to build a ``MatchIndex``.
+/// A set of words and phrases used to build a match index.
+///
+/// Callers may supply plaintext via ``init(words:)``, load a bundled digest file
+/// with ``bundled(for:)``, or derive variants with ``inserting(_:)`` /
+/// ``removing(_:)``. Digests are HMAC-SHA256 over normalized entries; the
+/// committed package resources never contain the plaintext corpus.
 public struct WordList: Sendable, Hashable {
   enum Storage: Hashable {
     case words(Set<String>)
@@ -17,13 +22,15 @@ public struct WordList: Sendable, Hashable {
 
   let storage: Storage
 
-  /// Creates a list from plaintext words (normalized at index build time).
+  /// Creates a list from plaintext words (normalized when the index is built).
   public init(words: some Sequence<String>) {
     let normalized = Set(words.map(WordDigest.normalize).filter { !$0.isEmpty })
     storage = .words(normalized)
   }
 
   /// Loads the bundled hashed list for `language`.
+  ///
+  /// - Precondition: The package must contain `<language.rawValue>.hashes`.
   public static func bundled(for language: Language) -> WordList {
     guard let list = bundledIfPresent(for: language) else {
       preconditionFailure("Missing bundled word list for \(language.rawValue)")
@@ -31,7 +38,7 @@ public struct WordList: Sendable, Hashable {
     return list
   }
 
-  /// Union of every bundled language list that is present in the package resources.
+  /// Union of every bundled language list present in the package resources.
   public static func allBundled() -> WordList {
     var combined: [DigestEntry] = []
     var seen = Set<Data>()
@@ -64,6 +71,7 @@ public struct WordList: Sendable, Hashable {
     return loadDigests(from: url)
   }
 
+  /// Returns a list with `words` added (hashed when storage is digest-backed).
   public func inserting(_ words: some Sequence<String>) -> WordList {
     switch storage {
     case var .words(existing):
@@ -87,6 +95,7 @@ public struct WordList: Sendable, Hashable {
     }
   }
 
+  /// Returns a list with `words` removed (by normalized form / digest).
   public func removing(_ words: some Sequence<String>) -> WordList {
     let toRemove = Set(words.map(WordDigest.normalize).filter { !$0.isEmpty })
     switch storage {
