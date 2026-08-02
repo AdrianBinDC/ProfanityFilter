@@ -2,12 +2,15 @@
 MODERNIZATION.md
 
 # Plaintext word lists (hashed artifacts are committed)
+Maintainer/*.txt
 **/WordLists/*.txt
 **/*.plaintext
 
 # SPM / Xcode
 .build/
-.swiftpm/
+# Keep shared schemes under .swiftpm/xcode/xcshareddata; ignore local SPM extras.
+.swiftpm/config
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
 DerivedData/
 *.xcodeproj/
 *.xcworkspace/
