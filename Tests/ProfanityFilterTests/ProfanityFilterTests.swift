@@ -1,4 +1,4 @@
-// Copyright (c) 2018 Adrian Bolinger
+// Copyright (c) 2018-2026 Adrian Bolinger
 // SPDX-License-Identifier: MIT
 
 import Foundation
