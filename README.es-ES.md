@@ -1,13 +1,21 @@
 # ProfanityFilter
 
+[![CI](https://github.com/AdrianBinDC/ProfanityFilter/actions/workflows/ci.yml/badge.svg)](https://github.com/AdrianBinDC/ProfanityFilter/actions/workflows/ci.yml)
+[![Swift 6.3+](https://img.shields.io/badge/Swift-6.3+-F05138?logo=swift&logoColor=white)](https://swift.org)
+[![Platforms](https://img.shields.io/badge/platforms-iOS%2018%20%7C%20macOS%2015%20%7C%20tvOS%2018%20%7C%20watchOS%2011%20%7C%20visionOS%202-lightgrey)](Package.swift)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/AdrianBinDC/ProfanityFilter)](https://github.com/AdrianBinDC/ProfanityFilter/releases)
+
 Filtro de lenguaje inapropiado configurable, en el dispositivo, para plataformas Apple. Construye un índice una vez (digests con sal) y sustituye coincidencias con el estilo que elijas.
 
-[English](README.md)
+[English](README.md) · [Changelog](CHANGELOG.md)
 
 ## Requisitos
 
 - Swift 6.3+
 - iOS 18+ / macOS 15+ / tvOS 18+ / watchOS 11+ / visionOS 2+
+
+Los mínimos de plataforma siguen a `Synchronization.Mutex` (concurrencia de Swift 6). Versiones anteriores no están soportadas.
 
 ## Instalación
 
@@ -15,7 +23,7 @@ Añade el paquete en Xcode (**File → Add Package Dependencies…**) o en `Pack
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/AdrianBinDC/ProfanityFilter.git", from: "1.0.0"),
+  .package(url: "https://github.com/AdrianBinDC/ProfanityFilter.git", from: "1.1.0"),
 ],
 ```
 
